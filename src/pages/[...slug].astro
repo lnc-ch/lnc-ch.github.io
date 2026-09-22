@@ -1,41 +1,43 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
-import BaseLayout from "../layouts/BaseLayout.astro";
-import PageRenderer from "../components/PageRenderer.astro";
-import { getLocalizedCopy, localizePath, locales, type Locale } from "../lib/i18n";
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageRenderer from '../components/PageRenderer.astro';
+import NewspaperArticle from '../components/NewspaperArticle.astro';
+import { getLocalizedCopy, localizePath, locales, type Locale } from '../lib/i18n';
+import { articlePath, storyCopy } from '../lib/newspaper/content.mjs';
+import type { NewspaperSection, NewspaperStory } from '../lib/newspaper/schema';
+
+interface Article { edition: NewspaperSection; story: NewspaperStory }
+interface Props { page: CollectionEntry<'pages'>; locale: Locale; route: string; article?: Article }
 
 export async function getStaticPaths() {
-  const pages = await getCollection("pages");
-
-  return pages.flatMap((page) =>
-    locales.map((locale) => {
-      const path = localizePath(page.data.slug, locale);
-      const slug = path.replace(/^\/+|\/+$/g, "");
-
-      return {
-        params: { slug: slug || undefined },
-        props: { page, locale },
-      };
-    }),
-  );
+  const pages = await getCollection('pages');
+  const paths: Array<{ params: { slug: string | undefined }; props: Props }> = [];
+  const seen = new Set<string>();
+  const add = (page: CollectionEntry<'pages'>, route: string, article?: Article) => {
+    for (const locale of locales) {
+      const slug = localizePath(route, locale).replace(/^\/+|\/+$/g, '');
+      if (seen.has(slug)) throw new Error(`Duplicate generated page URL: /${slug}`);
+      seen.add(slug);
+      paths.push({ params: { slug: slug || undefined }, props: { page, locale, route, article } });
+    }
+  };
+  for (const page of pages) {
+    add(page, page.data.slug);
+    for (const edition of page.data.sections) {
+      if (edition.type !== 'newspaper') continue;
+      for (const story of edition.stories) add(page, articlePath(page.data.slug, edition.id, story.id), { edition, story });
+    }
+  }
+  return paths;
 }
 
-interface Props {
-  page: CollectionEntry<"pages">;
-  locale: Locale;
-}
-
-const { page, locale } = Astro.props;
-
-const title = getLocalizedCopy(page.data.title, locale).text;
-const description = getLocalizedCopy(page.data.description, locale).text;
+const { page, locale, route, article } = Astro.props;
+const copy = article ? storyCopy(article.story, locale) : undefined;
+const title = copy?.title ?? getLocalizedCopy(page.data.title, locale).text;
+const description = copy?.deck ?? getLocalizedCopy(page.data.description, locale).text;
+const noindex = article ? article.story.placeholder : page.data.sections.some(section => section.type === 'newspaper' && section.stories.some(story => story.placeholder));
 ---
-
-<BaseLayout
-  title={title}
-  description={description}
-  locale={locale}
-  slug={page.data.slug}
->
-  <PageRenderer sections={page.data.sections} locale={locale} />
+<BaseLayout title={title} description={description} locale={locale} slug={route} noindex={noindex}>
+  {article ? <NewspaperArticle {...article} locale={locale} slug={page.data.slug} /> : <PageRenderer sections={page.data.sections} locale={locale} slug={page.data.slug} />}
 </BaseLayout>

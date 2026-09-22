@@ -1,33 +1,20 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import type { Locale } from "../lib/i18n";
-
-import Hero from "./sections/Hero.astro";
-import RichText from "./sections/RichText.astro";
-import Split from "./sections/Split.astro";
-import Gallery from "./sections/Gallery.astro";
-import CTA from "./sections/CTA.astro";
-
-type Section = CollectionEntry<"pages">["data"]["sections"][number];
-
-interface Props {
-  sections: Section[];
-  locale: Locale;
-}
-
-const { sections, locale } = Astro.props;
-
-const components = {
-  hero: Hero,
-  rich_text: RichText,
-  split: Split,
-  gallery: Gallery,
-  cta: CTA,
-};
+import type { CollectionEntry } from 'astro:content';
+import type { Locale } from '../lib/i18n';
+import Hero from './sections/Hero.astro';
+import RichText from './sections/RichText.astro';
+import Split from './sections/Split.astro';
+import Gallery from './sections/Gallery.astro';
+import CTA from './sections/CTA.astro';
+import Newspaper from './sections/Newspaper.astro';
+type Section = CollectionEntry<'pages'>['data']['sections'][number];
+interface Props { sections: Section[]; locale: Locale; slug: string }
+const { sections, locale, slug } = Astro.props;
+const components = { hero: Hero, rich_text: RichText, split: Split, gallery: Gallery, cta: CTA };
 ---
-
 {
-  sections.map((section) => {
+  sections.map(section => {
+    if (section.type === 'newspaper') return <Newspaper {...section} locale={locale} slug={slug} />;
     const Component = components[section.type];
     return <Component {...section} locale={locale} />;
   })

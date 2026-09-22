@@ -5,17 +5,17 @@
     {
       "href": "/",
       "label": {
-        "ja": "ホーム",
-        "fr": "Accueil",
-        "en": "Home"
+        "ja": "一面",
+        "fr": "La une",
+        "en": "Front page"
       }
     },
     {
       "href": "/about",
       "label": {
-        "ja": "私たちについて",
-        "fr": "À propos",
-        "en": "About"
+        "ja": "サークルについて",
+        "fr": "Le cercle",
+        "en": "The circle"
       }
     }
   ]

@@ -1,75 +1,33 @@
 ---
-import site from "../data/site.json";
-import { localeLabels, localizePath, type Locale } from "../lib/i18n";
-
-import "normalize.css/normalize.css";
-import "locomotive-scroll/dist/locomotive-scroll.css";
-import "../styles/global.css";
-import "../styles/transitions.css";
-
-interface Props {
-  title: string;
-  description?: string;
-  locale: Locale;
-  slug: string;
-}
-
-const { title, description = site.description, locale, slug } = Astro.props;
-const pageTitle = `${title} — ${site.name}`;
+import site from '../data/site.json';
+import { localizePath, locales, type Locale } from '../lib/i18n';
+import { renderToolbar, renderFooter } from '../lib/newspaper/render.mjs';
+import 'normalize.css/normalize.css';
+import '../styles/global.css';
+import '../styles/newspaper.css';
+interface Props { title: string; description?: string; locale: Locale; slug: string; noindex?: boolean }
+const { title, description = site.description, locale, slug, noindex = false } = Astro.props;
+const base = Astro.site ?? new URL(Astro.url.origin);
 ---
-
 <!doctype html>
 <html lang={locale}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <title>{pageTitle}</title>
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="canonical" href={new URL(localizePath(slug, locale), base)} />
+    {locales.map(language => <link rel="alternate" hreflang={language} href={new URL(localizePath(slug, language), base)} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(localizePath(slug, 'ja'), base)} />
+    <title>{title.replace(/\n/g, ' ')} — {site.name}</title>
   </head>
-
-  <body data-barba="wrapper">
-    <div
-      class="page-shell"
-      data-barba="container"
-      data-barba-namespace={locale}
-      data-locale={locale}
-    >
-      <header class="site-header">
-        <a class="site-name" href={localizePath("/", locale)}>{site.name}</a>
-
-        <nav class="site-nav" aria-label="Main navigation">
-          {
-            site.navigation.map((item) => (
-              <a href={localizePath(item.href, locale)}>{item.label[locale]}</a>
-            ))
-          }
-        </nav>
-
-        <nav class="language-nav" aria-label="Language">
-          {
-            (Object.keys(localeLabels) as Locale[]).map((targetLocale) => (
-              <a
-                href={localizePath(slug, targetLocale)}
-                aria-current={targetLocale === locale ? "page" : undefined}
-              >
-                {localeLabels[targetLocale]}
-              </a>
-            ))
-          }
-        </nav>
-      </header>
-
-      <main>
-        <slot />
-      </main>
-
-      <footer class="site-footer">
-        <span>{site.name}</span>
-      </footer>
+  <body>
+    <div class="page-shell" data-locale={locale}>
+      <Fragment set:html={renderToolbar(site, locale, slug)} />
+      <main id="main" tabindex="-1"><slot /></main>
+      <Fragment set:html={renderFooter(site, locale)} />
     </div>
-
-    <script>
-      import "../scripts/app";
-    </script>
+    <!-- Native navigation keeps document language, metadata and focus correct. -->
+    <script is:inline src="/newspaper.js" defer></script>
   </body>
 </html>
