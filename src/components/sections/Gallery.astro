@@ -13,42 +13,108 @@ interface Props {
 const { heading, items } = Astro.props;
 ---
 
-<section class="section gallery">
-  {heading && <h2>{heading}</h2>}
+<section class="section gallery" data-section>
+  <div class="gallery__heading">
+    <span>Archive / 記録</span>
+    {heading && <h2 data-reveal>{heading}</h2>}
+  </div>
+
   <div class="gallery__grid">
-    {items.map((item) => (
-      <figure>
-        <img src={item.image} alt={item.alt ?? ""} loading="lazy" />
-        {item.caption && <figcaption>{item.caption}</figcaption>}
+    {items.map((item, index) => (
+      <figure data-reveal>
+        <div class="gallery__media" data-scroll data-scroll-speed={index % 2 ? "0.05" : "-0.04"}>
+          <img src={item.image} alt={item.alt ?? ""} loading="lazy" />
+        </div>
+        <figcaption>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <span>{item.caption ?? item.alt ?? "LNC archive"}</span>
+        </figcaption>
       </figure>
     ))}
   </div>
 </section>
 
 <style>
+  .gallery {
+    border-top: 1px solid var(--line);
+  }
+
+  .gallery__heading {
+    display: grid;
+    grid-template-columns: minmax(6rem, .35fr) 1fr;
+    gap: 2rem;
+    align-items: start;
+    margin-bottom: clamp(4rem, 8vw, 9rem);
+  }
+
+  .gallery__heading > span {
+    padding-top: .7rem;
+    font-size: .65rem;
+    text-transform: uppercase;
+    letter-spacing: .13em;
+  }
+
   h2 {
-    font-size: clamp(2rem, 4vw, 4rem);
-    letter-spacing: -.035em;
+    margin: 0;
+    max-width: 10ch;
+    font-size: clamp(4rem, 9vw, 10rem);
+    line-height: .84;
+    font-weight: 520;
+    letter-spacing: -.065em;
   }
 
   .gallery__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(1rem, 2vw, 2rem);
   }
 
   figure {
     margin: 0;
+    grid-column: span 7;
+  }
+
+  figure:nth-child(even) {
+    grid-column: 6 / span 7;
+    margin-top: 10vw;
+  }
+
+  .gallery__media {
+    overflow: hidden;
   }
 
   img {
     width: 100%;
     aspect-ratio: 4 / 3;
     object-fit: cover;
+    filter: grayscale(.12) saturate(.8);
+    transition: transform 1.2s var(--ease-out), filter .8s ease;
+  }
+
+  figure:hover img {
+    transform: scale(1.025);
+    filter: grayscale(0) saturate(1);
   }
 
   figcaption {
-    margin-top: .5rem;
-    font-size: .9rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: .75rem;
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  @media (max-width: 800px) {
+    .gallery__heading {
+      grid-template-columns: 1fr;
+    }
+
+    figure,
+    figure:nth-child(even) {
+      grid-column: 1 / -1;
+      margin-top: 0;
+    }
   }
 </style>

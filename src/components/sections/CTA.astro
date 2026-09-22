@@ -11,40 +11,91 @@ interface Props {
 const { heading, body, link } = Astro.props;
 ---
 
-<section class="section cta">
-  <div>
-    <h2>{heading}</h2>
-    {body && <p>{body}</p>}
+<section class="cta" data-section>
+  <div class="cta__inner">
+    <div>
+      <p class="cta__label">Next / 次へ</p>
+      <h2 data-reveal>{heading}</h2>
+      {body && <p class="cta__body" data-reveal>{body}</p>}
+    </div>
+
+    <a class="button" href={link.href} data-magnetic data-reveal>
+      <span>{link.label}</span>
+      <span aria-hidden="true">↗</span>
+    </a>
   </div>
-  <a class="button" href={link.href}>{link.label}</a>
 </section>
 
 <style>
   .cta {
-    display: flex;
-    justify-content: space-between;
-    gap: 2rem;
+    width: 100%;
+    padding: clamp(6rem, 12vw, 13rem) var(--gutter);
+    color: var(--paper);
+    background: var(--ink);
+  }
+
+  .cta__inner {
+    width: min(100%, var(--max));
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 3rem;
     align-items: end;
+  }
+
+  .cta__label {
+    margin: 0 0 2rem;
+    font-size: .65rem;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--accent);
   }
 
   h2 {
     margin: 0;
-    font-size: clamp(2.5rem, 6vw, 6rem);
-    letter-spacing: -.045em;
+    max-width: 9ch;
+    font-size: clamp(4rem, 10vw, 11rem);
+    line-height: .78;
+    font-weight: 520;
+    letter-spacing: -.07em;
+    text-transform: uppercase;
+  }
+
+  .cta__body {
+    width: min(34rem, 100%);
+    margin: 2.5rem 0 0;
+    font-size: clamp(1rem, 1.5vw, 1.3rem);
+    line-height: 1.45;
+    color: color-mix(in srgb, var(--paper) 70%, transparent);
   }
 
   .button {
-    display: inline-flex;
-    padding: .9rem 1.2rem;
-    border: 1px solid currentColor;
+    width: clamp(9rem, 14vw, 12rem);
+    aspect-ratio: 1;
+    border: 1px solid color-mix(in srgb, var(--paper) 35%, transparent);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
     text-decoration: none;
-    white-space: nowrap;
+    text-transform: uppercase;
+    font-size: .68rem;
+    letter-spacing: .12em;
+    transition: color .45s ease, background .45s ease, border-color .45s ease;
   }
 
-  @media (max-width: 760px) {
-    .cta {
+  .button:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+
+  @media (max-width: 800px) {
+    .cta__inner {
+      grid-template-columns: 1fr;
       align-items: start;
-      flex-direction: column;
     }
   }
 </style>

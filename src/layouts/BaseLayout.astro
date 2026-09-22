@@ -1,13 +1,17 @@
 ---
 import site from "../data/site.json";
+import "normalize.css/normalize.css";
+import "locomotive-scroll/dist/locomotive-scroll.css";
 import "../styles/global.css";
+import "../styles/transitions.css";
 
 interface Props {
   title: string;
   description?: string;
+  namespace: string;
 }
 
-const { title, description = site.description } = Astro.props;
+const { title, description = site.description, namespace } = Astro.props;
 const pageTitle = title === "Home" ? site.name : `${title} — ${site.name}`;
 ---
 
@@ -17,22 +21,57 @@ const pageTitle = title === "Home" ? site.name : `${title} — ${site.name}`;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#f0ede5" />
     <title>{pageTitle}</title>
   </head>
+
   <body>
-    <header class="site-header">
-      <a class="site-name" href="/">{site.name}</a>
-      <nav aria-label="Main navigation">
-        {site.navigation.map((item) => <a href={item.href}>{item.label}</a>)}
-      </nav>
-    </header>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="cursor" aria-hidden="true"><span></span></div>
 
-    <main>
-      <slot />
-    </main>
+    <div data-barba="wrapper">
+      <header class="site-header">
+        <a class="site-name" href="/" data-magnetic>
+          <span class="site-name__mark">LNC</span>
+          <span class="site-name__long">{site.name}</span>
+        </a>
 
-    <footer class="site-footer">
-      <span>{site.name}</span>
-    </footer>
+        <nav aria-label="Main navigation">
+          {site.navigation.map((item, index) => (
+            <a href={item.href} data-magnetic>
+              <span>0{index + 1}</span>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      </header>
+
+      <main
+        class="page"
+        data-barba="container"
+        data-barba-namespace={namespace}
+      >
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        <p>Lausanne · Switzerland</p>
+        <div class="site-footer__wordmark" aria-hidden="true">LNC</div>
+        <p>日本 ↔ Lausanne</p>
+      </footer>
+    </div>
+
+    <div class="transition-curtain" aria-hidden="true">
+      <div class="transition-curtain__meta">
+        <span>Lausanne</span>
+        <span data-transition-label>Next</span>
+        <span>日本</span>
+      </div>
+      <div class="transition-curtain__mark">LNC</div>
+    </div>
+
+    <script>
+      import "../scripts/app";
+    </script>
   </body>
 </html>

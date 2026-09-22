@@ -1,12 +1,25 @@
 title: Home
 slug: /
-description: Lausanne Nihonjin Circle
+description: Lausanne Nihonjin Circle — a Japanese community in Lausanne, Switzerland.
 sections:
   - type: hero
-    eyebrow: Lausanne Nihonjin Circle
-    heading: Lausanne Nihonjin Circle
-    subheading: A home for our community in Lausanne.
-    layout: center
+    eyebrow: Lausanne · Switzerland / 日本
+    heading: Nihonjin Circle
+    subheading: A living point of contact between Lausanne and Japan — community, language, culture and the people who move between them.
+    layout: left
   - type: rich_text
-    heading: Welcome
-    body: <p>This site is now powered by Astro and Pages CMS. Content editors can build and rearrange pages without touching the code.</p>
+    heading: Two places. One circle.
+    variant: statement
+    body: >-
+      <p>We are a Lausanne-based community built around a simple idea: make the distance between Switzerland and Japan feel smaller.</p>
+  - type: rich_text
+    heading: Not a club page. A living front door.
+    variant: standard
+    body: >-
+      <p>Events, encounters and cultural exchange should feel human before they feel institutional. This site is designed the same way — tactile, editorial and alive, while every page remains completely manageable through Pages CMS.</p>
+  - type: cta
+    heading: Enter the circle.
+    body: See the idea behind LNC and how the community fits together.
+    link:
+      label: About LNC
+      href: /about

@@ -19,6 +19,7 @@ const heroSchema = z.object({
 const richTextSchema = z.object({
   type: z.literal("rich_text"),
   heading: z.string().optional(),
+  variant: z.enum(["standard", "statement"]).default("standard"),
   body: z.string(),
 });
 

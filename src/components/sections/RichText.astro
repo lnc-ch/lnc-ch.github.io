@@ -1,32 +1,98 @@
 ---
 interface Props {
   heading?: string;
+  variant?: "standard" | "statement";
   body: string;
 }
 
-const { heading, body } = Astro.props;
+const { heading, variant = "standard", body } = Astro.props;
 ---
 
-<section class="section prose-section">
-  {heading && <h2>{heading}</h2>}
-  <div class="prose" set:html={body} />
+<section class:list={["section", "prose-section", `prose-section--${variant}`]} data-section>
+  <div class="prose-section__rail" aria-hidden="true">
+    <span>Editorial</span>
+    <span>●</span>
+  </div>
+
+  <div class="prose-section__content">
+    {heading && <h2 data-reveal>{heading}</h2>}
+    <div class="prose" data-reveal set:html={body} />
+  </div>
 </section>
 
 <style>
   .prose-section {
     display: grid;
-    gap: 1.5rem;
+    grid-template-columns: minmax(5rem, 12vw) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 5rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .prose-section__rail {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-top: .25rem;
+    font-size: .62rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+  }
+
+  .prose-section__content {
+    display: grid;
+    grid-template-columns: minmax(0, .95fr) minmax(18rem, .65fr);
+    gap: clamp(2rem, 7vw, 8rem);
+    align-items: start;
   }
 
   h2 {
     margin: 0;
-    font-size: clamp(2rem, 5vw, 4rem);
-    letter-spacing: -.035em;
+    max-width: 11ch;
+    font-size: clamp(3rem, 7vw, 7.5rem);
+    line-height: .92;
+    font-weight: 520;
+    letter-spacing: -.06em;
   }
 
   .prose {
-    max-width: 52rem;
-    font-size: 1.08rem;
-    line-height: 1.65;
+    max-width: 38rem;
+    font-size: clamp(1.05rem, 1.55vw, 1.35rem);
+    line-height: 1.5;
+    letter-spacing: -.015em;
+  }
+
+  .prose-section--statement {
+    min-height: 80svh;
+    align-items: center;
+  }
+
+  .prose-section--statement .prose-section__content {
+    grid-template-columns: 1fr;
+  }
+
+  .prose-section--statement h2 {
+    max-width: 13ch;
+    font-size: clamp(4rem, 9.5vw, 10.5rem);
+    line-height: .82;
+  }
+
+  .prose-section--statement .prose {
+    margin-left: auto;
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+  }
+
+  @media (max-width: 800px) {
+    .prose-section {
+      grid-template-columns: 1fr;
+    }
+
+    .prose-section__rail {
+      writing-mode: horizontal-tb;
+    }
+
+    .prose-section__content {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

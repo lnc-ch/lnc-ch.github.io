@@ -67,6 +67,15 @@ content:
               - name: heading
                 label: Heading
                 type: string
+              - name: variant
+                label: Scale
+                type: select
+                options:
+                  values:
+                    - name: standard
+                      label: Standard
+                    - name: statement
+                      label: Statement
               - name: body
                 label: Content
                 type: rich-text

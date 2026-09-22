@@ -2,6 +2,7 @@
   "name": "Lausanne Nihonjin Circle",
   "description": "Lausanne Nihonjin Circle",
   "navigation": [
-    { "label": "Home", "href": "/" }
+    { "label": "Home", "href": "/" },
+    { "label": "About", "href": "/about" }
   ]
 }

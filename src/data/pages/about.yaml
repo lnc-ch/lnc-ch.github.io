@@ -1,0 +1,29 @@
+title: About
+slug: /about
+description: About Lausanne Nihonjin Circle.
+
+sections:
+  - type: hero
+    eyebrow: About / 私たちについて
+    heading: Built to connect.
+    subheading: Lausanne is international by nature. LNC gives its Japanese community — and people drawn to Japan — a place to actually meet.
+    layout: left
+
+  - type: rich_text
+    heading: Community before institution.
+    variant: statement
+    body: >-
+      <p>The circle exists to create encounters that would otherwise never happen: students, residents, newcomers, long-time locals, Japanese speakers and absolute beginners.</p>
+
+  - type: rich_text
+    heading: Designed to keep moving.
+    variant: standard
+    body: >-
+      <p>The website follows the same principle. Content is independent from presentation, pages are assembled from reusable sections, and the whole public site is generated as static HTML. Future committees can change the story without dismantling the design.</p>
+
+  - type: cta
+    heading: Back to the beginning.
+    body: Return through the red curtain.
+    link:
+      label: Home
+      href: /

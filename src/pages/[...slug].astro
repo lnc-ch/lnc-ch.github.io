@@ -21,8 +21,15 @@ interface Props {
 }
 
 const { page } = Astro.props;
+const namespace = page.data.slug === "/"
+  ? "home"
+  : page.data.slug.replace(/^\/+|\/+$/g, "").replace(/\//g, "-");
 ---
 
-<BaseLayout title={page.data.title} description={page.data.description}>
+<BaseLayout
+  title={page.data.title}
+  description={page.data.description}
+  namespace={namespace}
+>
   <PageRenderer sections={page.data.sections} />
 </BaseLayout>
