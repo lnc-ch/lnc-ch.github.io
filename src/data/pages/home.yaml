@@ -1,0 +1,12 @@
+title: Home
+slug: /
+description: Lausanne Nihonjin Circle
+sections:
+  - type: hero
+    eyebrow: Lausanne Nihonjin Circle
+    heading: Lausanne Nihonjin Circle
+    subheading: A home for our community in Lausanne.
+    layout: center
+  - type: rich_text
+    heading: Welcome
+    body: <p>This site is now powered by Astro and Pages CMS. Content editors can build and rearrange pages without touching the code.</p>

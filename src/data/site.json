@@ -1,0 +1,7 @@
+{
+  "name": "Lausanne Nihonjin Circle",
+  "description": "Lausanne Nihonjin Circle",
+  "navigation": [
+    { "label": "Home", "href": "/" }
+  ]
+}

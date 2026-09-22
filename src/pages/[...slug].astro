@@ -1,0 +1,28 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageRenderer from "../components/PageRenderer.astro";
+
+export async function getStaticPaths() {
+  const pages = await getCollection("pages");
+
+  return pages.map((page) => {
+    const slug = page.data.slug.replace(/^\/+|\/+$/g, "");
+
+    return {
+      params: { slug: slug || undefined },
+      props: { page },
+    };
+  });
+}
+
+interface Props {
+  page: CollectionEntry<"pages">;
+}
+
+const { page } = Astro.props;
+---
+
+<BaseLayout title={page.data.title} description={page.data.description}>
+  <PageRenderer sections={page.data.sections} />
+</BaseLayout>
