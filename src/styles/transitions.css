@@ -1,42 +1,14 @@
-.transition-curtain {
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-  display: grid;
-  place-items: center;
-  padding: var(--gutter);
-  color: var(--ink);
-  background: var(--accent);
-  transform: translateY(100%);
-  will-change: transform;
-  pointer-events: none;
-  overflow: hidden;
-}
+/*
+  Intentionally boring placeholder transitions.
+  Replace these once the visual language is designed.
+*/
 
-.transition-curtain__meta {
-  position: absolute;
-  inset: var(--gutter) var(--gutter) auto;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  text-transform: uppercase;
-  font-size: .62rem;
-  letter-spacing: .12em;
-}
-
-.transition-curtain__mark {
-  font-size: clamp(9rem, 36vw, 38rem);
-  font-weight: 720;
-  line-height: .7;
-  letter-spacing: -.09em;
-}
-
-.is-transitioning .site-header {
-  pointer-events: none;
+[data-barba="container"] {
+  will-change: opacity;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .transition-curtain {
-    display: none;
+  [data-barba="container"] {
+    will-change: auto;
   }
 }

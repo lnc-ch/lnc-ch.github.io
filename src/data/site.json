@@ -2,7 +2,21 @@
   "name": "Lausanne Nihonjin Circle",
   "description": "Lausanne Nihonjin Circle",
   "navigation": [
-    { "label": "Home", "href": "/" },
-    { "label": "About", "href": "/about" }
+    {
+      "href": "/",
+      "label": {
+        "ja": "ホーム",
+        "fr": "Accueil",
+        "en": "Home"
+      }
+    },
+    {
+      "href": "/about",
+      "label": {
+        "ja": "私たちについて",
+        "fr": "À propos",
+        "en": "About"
+      }
+    }
   ]
 }

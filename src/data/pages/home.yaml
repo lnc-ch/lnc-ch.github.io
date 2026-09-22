@@ -1,25 +1,69 @@
-title: Home
+key: home
+
+title:
+  ja:
+    text: ホーム
+  fr:
+    text: Accueil
+  en:
+    text: Home
+
 slug: /
-description: Lausanne Nihonjin Circle — a Japanese community in Lausanne, Switzerland.
+
+description:
+  ja:
+    text: ローザンヌ日本人サークル
+  fr:
+    text: Lausanne Nihonjin Circle
+  en:
+    text: Lausanne Nihonjin Circle
+
+translationReview:
+  fr: draft
+  en: draft
+
 sections:
   - type: hero
-    eyebrow: Lausanne · Switzerland / 日本
-    heading: Nihonjin Circle
-    subheading: A living point of contact between Lausanne and Japan — community, language, culture and the people who move between them.
-    layout: left
+    layout: default
+    copy:
+      ja:
+        eyebrow: Lausanne Nihonjin Circle
+        heading: ローザンヌ日本人サークル
+        subheading: 日本とローザンヌをつなぐコミュニティ。
+      fr:
+        eyebrow: Lausanne Nihonjin Circle
+        heading: Lausanne Nihonjin Circle
+        subheading: Une communauté entre Lausanne et le Japon.
+      en:
+        eyebrow: Lausanne Nihonjin Circle
+        heading: Lausanne Nihonjin Circle
+        subheading: A community between Lausanne and Japan.
+
   - type: rich_text
-    heading: Two places. One circle.
-    variant: statement
-    body: >-
-      <p>We are a Lausanne-based community built around a simple idea: make the distance between Switzerland and Japan feel smaller.</p>
-  - type: rich_text
-    heading: Not a club page. A living front door.
     variant: standard
-    body: >-
-      <p>Events, encounters and cultural exchange should feel human before they feel institutional. This site is designed the same way — tactile, editorial and alive, while every page remains completely manageable through Pages CMS.</p>
+    copy:
+      ja:
+        heading: ようこそ
+        body: >-
+          <p>これは多言語サイトの最小構成です。デザインとアニメーションはここから作っていきます。</p>
+      fr:
+        heading: Bienvenue
+        body: >-
+          <p>Voici la base minimale du site multilingue. Le design et les animations viendront ensuite.</p>
+      en:
+        heading: Welcome
+        body: >-
+          <p>This is the minimal multilingual foundation. Design and motion come next.</p>
+
   - type: cta
-    heading: Enter the circle.
-    body: See the idea behind LNC and how the community fits together.
-    link:
-      label: About LNC
-      href: /about
+    href: /about
+    copy:
+      ja:
+        heading: 私たちについて
+        label: 詳しく見る
+      fr:
+        heading: À propos
+        label: En savoir plus
+      en:
+        heading: About us
+        label: Learn more

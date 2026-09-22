@@ -2,34 +2,40 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageRenderer from "../components/PageRenderer.astro";
+import { getLocalizedCopy, localizePath, locales, type Locale } from "../lib/i18n";
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages");
 
-  return pages.map((page) => {
-    const slug = page.data.slug.replace(/^\/+|\/+$/g, "");
+  return pages.flatMap((page) =>
+    locales.map((locale) => {
+      const path = localizePath(page.data.slug, locale);
+      const slug = path.replace(/^\/+|\/+$/g, "");
 
-    return {
-      params: { slug: slug || undefined },
-      props: { page },
-    };
-  });
+      return {
+        params: { slug: slug || undefined },
+        props: { page, locale },
+      };
+    }),
+  );
 }
 
 interface Props {
   page: CollectionEntry<"pages">;
+  locale: Locale;
 }
 
-const { page } = Astro.props;
-const namespace = page.data.slug === "/"
-  ? "home"
-  : page.data.slug.replace(/^\/+|\/+$/g, "").replace(/\//g, "-");
+const { page, locale } = Astro.props;
+
+const title = getLocalizedCopy(page.data.title, locale).text;
+const description = getLocalizedCopy(page.data.description, locale).text;
 ---
 
 <BaseLayout
-  title={page.data.title}
-  description={page.data.description}
-  namespace={namespace}
+  title={title}
+  description={description}
+  locale={locale}
+  slug={page.data.slug}
 >
-  <PageRenderer sections={page.data.sections} />
+  <PageRenderer sections={page.data.sections} locale={locale} />
 </BaseLayout>

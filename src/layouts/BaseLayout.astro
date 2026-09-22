@@ -1,5 +1,7 @@
 ---
 import site from "../data/site.json";
+import { localeLabels, localizePath, type Locale } from "../lib/i18n";
+
 import "normalize.css/normalize.css";
 import "locomotive-scroll/dist/locomotive-scroll.css";
 import "../styles/global.css";
@@ -8,66 +10,62 @@ import "../styles/transitions.css";
 interface Props {
   title: string;
   description?: string;
-  namespace: string;
+  locale: Locale;
+  slug: string;
 }
 
-const { title, description = site.description, namespace } = Astro.props;
-const pageTitle = title === "Home" ? site.name : `${title} — ${site.name}`;
+const { title, description = site.description, locale, slug } = Astro.props;
+const pageTitle = `${title} — ${site.name}`;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#f0ede5" />
     <title>{pageTitle}</title>
   </head>
 
-  <body>
-    <div class="noise" aria-hidden="true"></div>
-    <div class="cursor" aria-hidden="true"><span></span></div>
-
-    <div data-barba="wrapper">
+  <body data-barba="wrapper">
+    <div
+      class="page-shell"
+      data-barba="container"
+      data-barba-namespace={locale}
+      data-locale={locale}
+    >
       <header class="site-header">
-        <a class="site-name" href="/" data-magnetic>
-          <span class="site-name__mark">LNC</span>
-          <span class="site-name__long">{site.name}</span>
-        </a>
+        <a class="site-name" href={localizePath("/", locale)}>{site.name}</a>
 
-        <nav aria-label="Main navigation">
-          {site.navigation.map((item, index) => (
-            <a href={item.href} data-magnetic>
-              <span>0{index + 1}</span>
-              {item.label}
-            </a>
-          ))}
+        <nav class="site-nav" aria-label="Main navigation">
+          {
+            site.navigation.map((item) => (
+              <a href={localizePath(item.href, locale)}>{item.label[locale]}</a>
+            ))
+          }
+        </nav>
+
+        <nav class="language-nav" aria-label="Language">
+          {
+            (Object.keys(localeLabels) as Locale[]).map((targetLocale) => (
+              <a
+                href={localizePath(slug, targetLocale)}
+                aria-current={targetLocale === locale ? "page" : undefined}
+              >
+                {localeLabels[targetLocale]}
+              </a>
+            ))
+          }
         </nav>
       </header>
 
-      <main
-        class="page"
-        data-barba="container"
-        data-barba-namespace={namespace}
-      >
+      <main>
         <slot />
       </main>
 
       <footer class="site-footer">
-        <p>Lausanne · Switzerland</p>
-        <div class="site-footer__wordmark" aria-hidden="true">LNC</div>
-        <p>日本 ↔ Lausanne</p>
+        <span>{site.name}</span>
       </footer>
-    </div>
-
-    <div class="transition-curtain" aria-hidden="true">
-      <div class="transition-curtain__meta">
-        <span>Lausanne</span>
-        <span data-transition-label>Next</span>
-        <span>日本</span>
-      </div>
-      <div class="transition-curtain__mark">LNC</div>
     </div>
 
     <script>

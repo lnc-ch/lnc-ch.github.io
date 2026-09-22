@@ -1,5 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import type { Locale } from "../lib/i18n";
+
 import Hero from "./sections/Hero.astro";
 import RichText from "./sections/RichText.astro";
 import Split from "./sections/Split.astro";
@@ -10,9 +12,11 @@ type Section = CollectionEntry<"pages">["data"]["sections"][number];
 
 interface Props {
   sections: Section[];
+  locale: Locale;
 }
 
-const { sections } = Astro.props;
+const { sections, locale } = Astro.props;
+
 const components = {
   hero: Hero,
   rich_text: RichText,
@@ -22,7 +26,9 @@ const components = {
 };
 ---
 
-{sections.map((section) => {
-  const Component = components[section.type];
-  return <Component {...section} />;
-})}
+{
+  sections.map((section) => {
+    const Component = components[section.type];
+    return <Component {...section} locale={locale} />;
+  })
+}

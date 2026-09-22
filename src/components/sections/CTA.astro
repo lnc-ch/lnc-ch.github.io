@@ -1,101 +1,33 @@
 ---
-interface Props {
+import { getLocalizedCopy, localizeHref, type Locale } from "../../lib/i18n";
+
+interface LocalCopy {
   heading: string;
   body?: string;
-  link: {
-    label: string;
-    href: string;
+  label: string;
+}
+
+interface Props {
+  locale: Locale;
+  href: string;
+  copy: {
+    ja: LocalCopy;
+    fr?: Partial<LocalCopy>;
+    en?: Partial<LocalCopy>;
   };
 }
 
-const { heading, body, link } = Astro.props;
+const { locale, href, copy } = Astro.props;
+const text = getLocalizedCopy(copy, locale);
 ---
 
-<section class="cta" data-section>
-  <div class="cta__inner">
-    <div>
-      <p class="cta__label">Next / 次へ</p>
-      <h2 data-reveal>{heading}</h2>
-      {body && <p class="cta__body" data-reveal>{body}</p>}
-    </div>
-
-    <a class="button" href={link.href} data-magnetic data-reveal>
-      <span>{link.label}</span>
-      <span aria-hidden="true">↗</span>
-    </a>
+<section class="section cta" data-locale={locale}>
+  <div data-animate>
+    <h2>{text.heading}</h2>
+    {text.body && <p>{text.body}</p>}
   </div>
+
+  <a class="button" href={localizeHref(href, locale)} data-animate>
+    {text.label}
+  </a>
 </section>
-
-<style>
-  .cta {
-    width: 100%;
-    padding: clamp(6rem, 12vw, 13rem) var(--gutter);
-    color: var(--paper);
-    background: var(--ink);
-  }
-
-  .cta__inner {
-    width: min(100%, var(--max));
-    margin-inline: auto;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 3rem;
-    align-items: end;
-  }
-
-  .cta__label {
-    margin: 0 0 2rem;
-    font-size: .65rem;
-    text-transform: uppercase;
-    letter-spacing: .14em;
-    color: var(--accent);
-  }
-
-  h2 {
-    margin: 0;
-    max-width: 9ch;
-    font-size: clamp(4rem, 10vw, 11rem);
-    line-height: .78;
-    font-weight: 520;
-    letter-spacing: -.07em;
-    text-transform: uppercase;
-  }
-
-  .cta__body {
-    width: min(34rem, 100%);
-    margin: 2.5rem 0 0;
-    font-size: clamp(1rem, 1.5vw, 1.3rem);
-    line-height: 1.45;
-    color: color-mix(in srgb, var(--paper) 70%, transparent);
-  }
-
-  .button {
-    width: clamp(9rem, 14vw, 12rem);
-    aspect-ratio: 1;
-    border: 1px solid color-mix(in srgb, var(--paper) 35%, transparent);
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: .4rem;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: .68rem;
-    letter-spacing: .12em;
-    transition: color .45s ease, background .45s ease, border-color .45s ease;
-  }
-
-  .button:hover {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--ink);
-  }
-
-  @media (max-width: 800px) {
-    .cta__inner {
-      grid-template-columns: 1fr;
-      align-items: start;
-    }
-  }
-</style>

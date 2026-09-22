@@ -1,29 +1,66 @@
-title: About
+key: about
+
+title:
+  ja:
+    text: 私たちについて
+  fr:
+    text: À propos
+  en:
+    text: About
+
 slug: /about
-description: About Lausanne Nihonjin Circle.
+
+description:
+  ja:
+    text: ローザンヌ日本人サークルについて
+  fr:
+    text: À propos du Lausanne Nihonjin Circle
+  en:
+    text: About Lausanne Nihonjin Circle
+
+translationReview:
+  fr: draft
+  en: draft
 
 sections:
   - type: hero
-    eyebrow: About / 私たちについて
-    heading: Built to connect.
-    subheading: Lausanne is international by nature. LNC gives its Japanese community — and people drawn to Japan — a place to actually meet.
-    layout: left
+    layout: default
+    copy:
+      ja:
+        heading: 私たちについて
+        subheading: ページ構造は共通、文章だけが言語ごとに変わります。
+      fr:
+        heading: À propos
+        subheading: La structure reste commune; seul le contenu éditorial est localisé.
+      en:
+        heading: About
+        subheading: Structure stays shared; only editorial copy is localized.
 
   - type: rich_text
-    heading: Community before institution.
-    variant: statement
-    body: >-
-      <p>The circle exists to create encounters that would otherwise never happen: students, residents, newcomers, long-time locals, Japanese speakers and absolute beginners.</p>
-
-  - type: rich_text
-    heading: Designed to keep moving.
     variant: standard
-    body: >-
-      <p>The website follows the same principle. Content is independent from presentation, pages are assembled from reusable sections, and the whole public site is generated as static HTML. Future committees can change the story without dismantling the design.</p>
+    copy:
+      ja:
+        heading: ひとつのページ、三つの言語
+        body: >-
+          <p>画像、順番、レイアウト、リンクは共通です。日本語が原文で、フランス語と英語は編集可能な翻訳です。</p>
+      fr:
+        heading: Une page, trois langues
+        body: >-
+          <p>Les images, l’ordre, la mise en page et les liens sont partagés. Le japonais est la source; le français et l’anglais sont des traductions éditables.</p>
+      en:
+        heading: One page, three languages
+        body: >-
+          <p>Images, order, layout and links are shared. Japanese is the source; French and English are editable translations.</p>
 
   - type: cta
-    heading: Back to the beginning.
-    body: Return through the red curtain.
-    link:
-      label: Home
-      href: /
+    href: /
+    copy:
+      ja:
+        heading: ホームへ
+        label: 戻る
+      fr:
+        heading: Retour à l’accueil
+        label: Retour
+      en:
+        heading: Back home
+        label: Back

@@ -9,23 +9,101 @@ content:
     path: src/data/pages
     format: yaml
     filename: "{primary}.yaml"
+
     view:
-      primary: title
-      fields: [title, slug]
-      sort: [title, slug]
+      primary: key
+      fields: [key, slug]
+      sort: [key, slug]
+
     fields:
-      - name: title
-        label: Page title
+      - name: key
+        label: Internal page ID
         type: string
         required: true
+        description: Used as the filename. Keep it short, e.g. home or about.
+
       - name: slug
         label: URL path
         type: string
         required: true
-        description: Use / for the home page, /about for About, etc.
+        description: Use / for home, /about for About, etc.
+
+      - name: title
+        label: Page title
+        type: object
+        fields:
+          - name: ja
+            label: Japanese (source)
+            type: object
+            fields:
+              - name: text
+                label: Title
+                type: string
+                required: true
+          - name: fr
+            label: French
+            type: object
+            fields:
+              - name: text
+                label: Title
+                type: string
+          - name: en
+            label: English
+            type: object
+            fields:
+              - name: text
+                label: Title
+                type: string
+
       - name: description
         label: SEO description
-        type: text
+        type: object
+        fields:
+          - name: ja
+            label: Japanese (source)
+            type: object
+            fields:
+              - name: text
+                label: Description
+                type: text
+          - name: fr
+            label: French
+            type: object
+            fields:
+              - name: text
+                label: Description
+                type: text
+          - name: en
+            label: English
+            type: object
+            fields:
+              - name: text
+                label: Description
+                type: text
+
+      - name: translationReview
+        label: Translation review
+        type: object
+        fields:
+          - name: fr
+            label: French
+            type: select
+            options:
+              values:
+                - name: draft
+                  label: AI draft / needs review
+                - name: reviewed
+                  label: Reviewed
+          - name: en
+            label: English
+            type: select
+            options:
+              values:
+                - name: draft
+                  label: AI draft / needs review
+                - name: reviewed
+                  label: Reviewed
+
       - name: sections
         label: Sections
         type: block
@@ -35,40 +113,73 @@ content:
             collapsed: true
             summary: "{type} — {index}"
         blockKey: type
+
         blocks:
           - name: hero
             label: Hero
             fields:
-              - name: eyebrow
-                label: Eyebrow
-                type: string
-              - name: heading
-                label: Heading
-                type: string
-                required: true
-              - name: subheading
-                label: Subheading
-                type: text
-              - name: image
-                label: Background image
-                type: image
               - name: layout
-                label: Alignment
+                label: Layout
                 type: select
                 options:
                   values:
-                    - name: left
-                      label: Left
+                    - name: default
+                      label: Default
                     - name: center
                       label: Center
+              - name: image
+                label: Image
+                type: image
+              - name: copy
+                label: Copy
+                type: object
+                fields:
+                  - name: ja
+                    label: Japanese (source)
+                    type: object
+                    fields:
+                      - name: eyebrow
+                        label: Eyebrow
+                        type: string
+                      - name: heading
+                        label: Heading
+                        type: string
+                        required: true
+                      - name: subheading
+                        label: Subheading
+                        type: text
+                  - name: fr
+                    label: French
+                    type: object
+                    fields:
+                      - name: eyebrow
+                        label: Eyebrow
+                        type: string
+                      - name: heading
+                        label: Heading
+                        type: string
+                      - name: subheading
+                        label: Subheading
+                        type: text
+                  - name: en
+                    label: English
+                    type: object
+                    fields:
+                      - name: eyebrow
+                        label: Eyebrow
+                        type: string
+                      - name: heading
+                        label: Heading
+                        type: string
+                      - name: subheading
+                        label: Subheading
+                        type: text
+
           - name: rich_text
             label: Rich text
             fields:
-              - name: heading
-                label: Heading
-                type: string
               - name: variant
-                label: Scale
+                label: Variant
                 type: select
                 options:
                   values:
@@ -76,34 +187,58 @@ content:
                       label: Standard
                     - name: statement
                       label: Statement
-              - name: body
-                label: Content
-                type: rich-text
-                required: true
-                options:
-                  format: html
-                  switcher: false
+              - name: copy
+                label: Copy
+                type: object
+                fields:
+                  - name: ja
+                    label: Japanese (source)
+                    type: object
+                    fields:
+                      - name: heading
+                        label: Heading
+                        type: string
+                      - name: body
+                        label: Content
+                        type: rich-text
+                        required: true
+                        options:
+                          format: html
+                          switcher: false
+                  - name: fr
+                    label: French
+                    type: object
+                    fields:
+                      - name: heading
+                        label: Heading
+                        type: string
+                      - name: body
+                        label: Content
+                        type: rich-text
+                        options:
+                          format: html
+                          switcher: false
+                  - name: en
+                    label: English
+                    type: object
+                    fields:
+                      - name: heading
+                        label: Heading
+                        type: string
+                      - name: body
+                        label: Content
+                        type: rich-text
+                        options:
+                          format: html
+                          switcher: false
+
           - name: split
             label: Text + image
             fields:
-              - name: heading
-                label: Heading
-                type: string
-                required: true
-              - name: body
-                label: Content
-                type: rich-text
-                required: true
-                options:
-                  format: html
-                  switcher: false
               - name: image
                 label: Image
                 type: image
                 required: true
-              - name: imageAlt
-                label: Image description (accessibility)
-                type: string
               - name: imagePosition
                 label: Image position
                 type: select
@@ -113,12 +248,89 @@ content:
                       label: Left
                     - name: right
                       label: Right
+              - name: copy
+                label: Copy
+                type: object
+                fields:
+                  - name: ja
+                    label: Japanese (source)
+                    type: object
+                    fields:
+                      - name: heading
+                        label: Heading
+                        type: string
+                        required: true
+                      - name: body
+                        label: Content
+                        type: rich-text
+                        required: true
+                        options:
+                          format: html
+                          switcher: false
+                      - name: imageAlt
+                        label: Image description
+                        type: string
+                  - name: fr
+                    label: French
+                    type: object
+                    fields:
+                      - name: heading
+                        label: Heading
+                        type: string
+                      - name: body
+                        label: Content
+                        type: rich-text
+                        options:
+                          format: html
+                          switcher: false
+                      - name: imageAlt
+                        label: Image description
+                        type: string
+                  - name: en
+                    label: English
+                    type: object
+                    fields:
+                      - name: heading
+                        label: Heading
+                        type: string
+                      - name: body
+                        label: Content
+                        type: rich-text
+                        options:
+                          format: html
+                          switcher: false
+                      - name: imageAlt
+                        label: Image description
+                        type: string
+
           - name: gallery
             label: Gallery
             fields:
-              - name: heading
-                label: Heading
-                type: string
+              - name: copy
+                label: Copy
+                type: object
+                fields:
+                  - name: ja
+                    label: Japanese (source)
+                    type: object
+                    fields:
+                      - name: heading
+                        label: Heading
+                        type: string
+                  - name: fr
+                    label: French
+                    type: object
+                    fields:
+                      - name: heading
+                        label: Heading
+                        type: string
+                  - name: en
+                    label: English
+                    type: object
+                    fields:
+                      - name: heading
+                        label: Heading
+                        type: string
               - name: items
                 label: Images
                 type: object
@@ -132,35 +344,93 @@ content:
                     label: Image
                     type: image
                     required: true
-                  - name: alt
-                    label: Image description (accessibility)
-                    type: string
-                  - name: caption
-                    label: Caption
-                    type: string
+                  - name: copy
+                    label: Copy
+                    type: object
+                    fields:
+                      - name: ja
+                        label: Japanese (source)
+                        type: object
+                        fields:
+                          - name: alt
+                            label: Image description
+                            type: string
+                          - name: caption
+                            label: Caption
+                            type: string
+                      - name: fr
+                        label: French
+                        type: object
+                        fields:
+                          - name: alt
+                            label: Image description
+                            type: string
+                          - name: caption
+                            label: Caption
+                            type: string
+                      - name: en
+                        label: English
+                        type: object
+                        fields:
+                          - name: alt
+                            label: Image description
+                            type: string
+                          - name: caption
+                            label: Caption
+                            type: string
+
           - name: cta
             label: Call to action
             fields:
-              - name: heading
-                label: Heading
+              - name: href
+                label: Link
                 type: string
                 required: true
-              - name: body
-                label: Text
-                type: text
-              - name: link
-                label: Button
+              - name: copy
+                label: Copy
                 type: object
-                required: true
                 fields:
-                  - name: label
-                    label: Button label
-                    type: string
-                    required: true
-                  - name: href
-                    label: Link
-                    type: string
-                    required: true
+                  - name: ja
+                    label: Japanese (source)
+                    type: object
+                    fields:
+                      - name: heading
+                        label: Heading
+                        type: string
+                        required: true
+                      - name: body
+                        label: Text
+                        type: text
+                      - name: label
+                        label: Button label
+                        type: string
+                        required: true
+                  - name: fr
+                    label: French
+                    type: object
+                    fields:
+                      - name: heading
+                        label: Heading
+                        type: string
+                      - name: body
+                        label: Text
+                        type: text
+                      - name: label
+                        label: Button label
+                        type: string
+                  - name: en
+                    label: English
+                    type: object
+                    fields:
+                      - name: heading
+                        label: Heading
+                        type: string
+                      - name: body
+                        label: Text
+                        type: text
+                      - name: label
+                        label: Button label
+                        type: string
 
   - name: site
     label: Site settings
@@ -181,13 +451,25 @@ content:
         list:
           collapsible:
             collapsed: true
-            summary: "{label}"
+            summary: "{href}"
         fields:
-          - name: label
-            label: Label
-            type: string
-            required: true
           - name: href
             label: Link
             type: string
             required: true
+          - name: label
+            label: Label
+            type: object
+            fields:
+              - name: ja
+                label: Japanese
+                type: string
+                required: true
+              - name: fr
+                label: French
+                type: string
+                required: true
+              - name: en
+                label: English
+                type: string
+                required: true
