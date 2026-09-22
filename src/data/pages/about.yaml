@@ -25,7 +25,7 @@ sections:
         heading: 私たちについて
         subheading: |-
           ページ構造は共通、文章だけが言語ごとに変わります。
-          test
+          test1
       fr:
         heading: À propos
         subheading: La structure reste commune; seul le contenu éditorial est localisé.
