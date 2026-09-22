@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Hero from "./sections/Hero.astro";
+import RichText from "./sections/RichText.astro";
+import Split from "./sections/Split.astro";
+import Gallery from "./sections/Gallery.astro";
+import CTA from "./sections/CTA.astro";
+
+type Section = CollectionEntry<"pages">["data"]["sections"][number];
+
+interface Props {
+  sections: Section[];
+}
+
+const { sections } = Astro.props;
+const components = {
+  hero: Hero,
+  rich_text: RichText,
+  split: Split,
+  gallery: Gallery,
+  cta: CTA,
+};
+---
+
+{sections.map((section) => {
+  const Component = components[section.type];
+  return <Component {...section} />;
+})}

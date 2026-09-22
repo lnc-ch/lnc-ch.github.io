@@ -1,0 +1,66 @@
+---
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  subheading?: string;
+  image?: string;
+  layout?: "left" | "center";
+}
+
+const { eyebrow, heading, subheading, image, layout = "left" } = Astro.props;
+---
+
+<section class:list={["section", "hero", `hero--${layout}`]}>
+  {image && <img class="hero__image" src={image} alt="" />}
+  <div class="hero__content">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{heading}</h1>
+    {subheading && <p class="hero__subheading">{subheading}</p>}
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 70svh;
+    display: grid;
+    align-items: end;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+
+  .hero__content {
+    max-width: 72rem;
+  }
+
+  .hero--center .hero__content {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(3.5rem, 10vw, 9rem);
+    line-height: .9;
+    letter-spacing: -.055em;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-size: .78rem;
+  }
+
+  .hero__subheading {
+    max-width: 44rem;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+  }
+</style>
