@@ -1,5 +1,5 @@
 key: about
-
+slug: /about
 title:
   ja:
     text: 私たちについて
@@ -7,9 +7,6 @@ title:
     text: À propos
   en:
     text: About
-
-slug: /about
-
 description:
   ja:
     text: ローザンヌ日本人サークルについて
@@ -17,41 +14,39 @@ description:
     text: À propos du Lausanne Nihonjin Circle
   en:
     text: About Lausanne Nihonjin Circle
-
 translationReview:
   fr: draft
   en: draft
-
 sections:
   - type: hero
     layout: default
     copy:
       ja:
         heading: 私たちについて
-        subheading: ページ構造は共通、文章だけが言語ごとに変わります。
+        subheading: |-
+          ページ構造は共通、文章だけが言語ごとに変わります。
+          test
       fr:
         heading: À propos
         subheading: La structure reste commune; seul le contenu éditorial est localisé.
       en:
         heading: About
         subheading: Structure stays shared; only editorial copy is localized.
-
   - type: rich_text
     variant: standard
     copy:
       ja:
         heading: ひとつのページ、三つの言語
-        body: >-
-          <p>画像、順番、レイアウト、リンクは共通です。日本語が原文で、フランス語と英語は編集可能な翻訳です。</p>
+        body: <p>画像、順番、レイアウト、リンクは共通です。日本語が原文で、フランス語と英語は編集可能な翻訳です。</p>
       fr:
         heading: Une page, trois langues
-        body: >-
-          <p>Les images, l’ordre, la mise en page et les liens sont partagés. Le japonais est la source; le français et l’anglais sont des traductions éditables.</p>
+        body: <p>Les images, l’ordre, la mise en page et les liens sont partagés. Le
+          japonais est la source; le français et l’anglais sont des traductions
+          éditables.</p>
       en:
         heading: One page, three languages
-        body: >-
-          <p>Images, order, layout and links are shared. Japanese is the source; French and English are editable translations.</p>
-
+        body: <p>Images, order, layout and links are shared. Japanese is the source;
+          French and English are editable translations.</p>
   - type: cta
     href: /
     copy:
