@@ -3,9 +3,6 @@ slug: /about/
 kind: content
 theme: moss
 draft: false
-translationReview:
-  fr: draft
-  en: draft
 title:
   ja:
     text: サークルについて
@@ -20,25 +17,31 @@ description:
     text: À propos du Lausanne Nihonjin Circle.
   en:
     text: About Lausanne Nihonjin Circle.
+translationReview:
+  fr: draft
+  en: draft
 sections:
-- type: rich_text
-  variant: statement
-  copy:
-    ja:
-      heading: Lausanne Nihonjin Circle
-      body: LNC（ローザンヌ日本人サークル）は、EPFLの日本文化に関わる学生サークルです。
-    fr:
-      heading: Lausanne Nihonjin Circle
-      body: Le LNC est une association étudiante de l’EPFL autour de la culture japonaise.
-    en:
-      heading: Lausanne Nihonjin Circle
-      body: LNC is a student association at EPFL centred on Japanese culture.
-- type: cta
-  href: /events/
-  copy:
-    ja:
-      label: 催事を見る
-    fr:
-      label: Voir le programme
-    en:
-      label: View the programme
+  - type: rich_text
+    variant: statement
+    copy:
+      ja:
+        heading: Lausanne Nihonjin Circle
+        body: |-
+          LNC（ローザンヌ日本人サークル）は、EPFLの日本文化に関わる学生サークルです。
+          最高
+      fr:
+        heading: Lausanne Nihonjin Circle
+        body: Le LNC est une association étudiante de l’EPFL autour de la culture
+          japonaise.
+      en:
+        heading: Lausanne Nihonjin Circle
+        body: LNC is a student association at EPFL centred on Japanese culture.
+  - type: cta
+    href: /events/
+    copy:
+      ja:
+        label: 催事を見る
+      fr:
+        label: Voir le programme
+      en:
+        label: View the programme
