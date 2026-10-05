@@ -1,11 +1,8 @@
 key: events
 slug: /events/
 kind: programme
-theme: clay
+theme: moss
 draft: false
-translationReview:
-  fr: draft
-  en: draft
 title:
   ja:
     text: 催事
@@ -20,5 +17,8 @@ description:
     text: Le programme et les archives du LNC.
   en:
     text: LNC’s programme and past events.
+translationReview:
+  fr: draft
+  en: draft
 sections:
-- type: event_index
+  - type: event_index
