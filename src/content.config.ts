@@ -1,7 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
-import { safeHref, validTimestamp } from './lib/content.mjs';
+import { normalizeTimestamp, safeHref, validTimestamp } from './lib/content.mjs';
 
 const optionalText = z.string().optional();
 const text = z.object({ text: z.string().min(1) });
@@ -10,6 +10,10 @@ const localized = <T extends z.ZodRawShape>(shape: T) => z.object({
 });
 const link = z.string().refine((value) => value === '' || Boolean(safeHref(value)), 'Use a local path or an http(s), mailto or tel URL.');
 const image = z.string().refine((value) => !value || (/^(\/(?!\/)|https?:\/\/)/.test(value) && Boolean(safeHref(value))), 'Use a local image path or an https:// image URL.');
+const timestamp = z.preprocess(
+  normalizeTimestamp,
+  z.string().refine(validTimestamp, 'Use an ISO date/time with an explicit timezone offset.'),
+);
 const theme = z.enum(['paper', 'clay', 'moss', 'rose', 'ink']);
 const review = z.object({ fr: z.enum(['draft','reviewed']).default('draft'), en: z.enum(['draft','reviewed']).default('draft') }).default({ fr:'draft', en:'draft' });
 const sections = z.discriminatedUnion('type', [
@@ -35,8 +39,8 @@ const events = defineCollection({
   schema: z.object({
     slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), draft: z.boolean().default(true),
     status: z.enum(['scheduled','cancelled']).default('scheduled'), theme: theme.default('clay'),
-    start: z.string().refine(validTimestamp, 'Use an ISO date/time with an explicit timezone offset.'),
-    end: z.string().refine(validTimestamp, 'Use an ISO date/time with an explicit timezone offset.'),
+    start: timestamp,
+    end: timestamp,
     location: z.string().min(1),
     registrationUrl: z.string().refine((value) => !value || (value.startsWith('https://') && Boolean(safeHref(value))), 'Registration must use HTTPS.').default(''),
     image: image.default(''), imageIllustration: z.boolean().default(false), translationReview: review,

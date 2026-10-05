@@ -42,6 +42,11 @@ export function copyFor(copy, locale) {
 }
 export const copyLanguage = (copy, locale, field) => copy?.[locale]?.[field]?.trim() ? locale : 'ja';
 
+export function normalizeTimestamp(value) {
+  if (value instanceof Date && Number.isFinite(value.getTime())) return value.toISOString();
+  return value;
+}
+
 export function validTimestamp(value) {
   if (typeof value !== 'string') return false;
   const parts = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.\d{1,3})?)?(Z|[+-]\d{2}:\d{2})$/.exec(value);

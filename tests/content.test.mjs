@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { localizePath, copyFor, safeHref, eventState, selectEvents, dateParts, themeFor, routeEntries, validateEvent, themeNames } from '../src/lib/content.mjs';
+import { localizePath, copyFor, safeHref, eventState, selectEvents, dateParts, themeFor, routeEntries, validateEvent, themeNames, normalizeTimestamp } from '../src/lib/content.mjs';
 
 test('Japanese paths stay canonical; other locales have exactly one prefix', () => {
   assert.equal(localizePath('/', 'ja'), '/');
@@ -45,6 +45,12 @@ test('display dates use Zurich time across winter/summer boundaries', () => {
   assert.equal(dateParts('2026-10-12T16:30:00Z','en').time,'18:30');
   assert.equal(dateParts('2026-11-15T17:30:00Z','fr').time,'18:30');
   assert.equal(dateParts('2026-10-05T23:30:00Z','ja').day,'06');
+});
+test('Pages CMS YAML timestamps normalize without changing the Swiss event time', () => {
+  const cmsValue = new Date('2026-11-15T14:00:00+01:00');
+  assert.equal(normalizeTimestamp(cmsValue),'2026-11-15T13:00:00.000Z');
+  assert.equal(normalizeTimestamp('2026-11-15T14:00:00+01:00'),'2026-11-15T14:00:00+01:00');
+  assert.equal(dateParts(normalizeTimestamp(cmsValue),'en').time,'14:00');
 });
 test('palette is shared and unknown themes fall back rather than inject CSS', () => {
   assert.equal(themeFor('clay').background,'#c87860');
