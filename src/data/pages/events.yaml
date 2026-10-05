@@ -1,0 +1,24 @@
+key: events
+slug: /events/
+kind: programme
+theme: clay
+draft: false
+translationReview:
+  fr: draft
+  en: draft
+title:
+  ja:
+    text: 催事
+  fr:
+    text: Événements
+  en:
+    text: Events
+description:
+  ja:
+    text: LNCの開催予定と過去の催事。
+  fr:
+    text: Le programme et les archives du LNC.
+  en:
+    text: LNC’s programme and past events.
+sections:
+- type: event_index

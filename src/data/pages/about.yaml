@@ -1,61 +1,44 @@
 key: about
-slug: /about
+slug: /about/
+kind: content
+theme: moss
+draft: false
+translationReview:
+  fr: draft
+  en: draft
 title:
   ja:
-    text: 私たちについてtest
+    text: サークルについて
   fr:
-    text: À propos
+    text: Le cercle
   en:
     text: About
 description:
   ja:
-    text: ローザンヌ日本人サークルについて
+    text: ローザンヌ日本人サークルについて。
   fr:
-    text: À propos du Lausanne Nihonjin Circle
+    text: À propos du Lausanne Nihonjin Circle.
   en:
-    text: About Lausanne Nihonjin Circle
-translationReview:
-  fr: draft
-  en: draft
+    text: About Lausanne Nihonjin Circle.
 sections:
-  - type: hero
-    layout: default
-    copy:
-      ja:
-        heading: 私たちについて
-        subheading: |-
-          ページ構造は共通、文章だけが言語ごとに変わります。
-          test1
-      fr:
-        heading: À propos
-        subheading: La structure reste commune; seul le contenu éditorial est localisé.
-      en:
-        heading: About
-        subheading: Structure stays shared; only editorial copy is localized.
-  - type: rich_text
-    variant: standard
-    copy:
-      ja:
-        heading: ひとつのページ、三つの言語
-        body: <p>画像、順番、レイアウト、リンクは共通です。日本語が原文で、フランス語と英語は編集可能な翻訳です。</p>
-      fr:
-        heading: Une page, trois langues
-        body: <p>Les images, l’ordre, la mise en page et les liens sont partagés. Le
-          japonais est la source; le français et l’anglais sont des traductions
-          éditables.</p>
-      en:
-        heading: One page, three languages
-        body: <p>Images, order, layout and links are shared. Japanese is the source;
-          French and English are editable translations.</p>
-  - type: cta
-    href: /
-    copy:
-      ja:
-        heading: ホームへ
-        label: 戻る
-      fr:
-        heading: Retour à l’accueil
-        label: Retour
-      en:
-        heading: Back home
-        label: Back
+- type: rich_text
+  variant: statement
+  copy:
+    ja:
+      heading: Lausanne Nihonjin Circle
+      body: LNC（ローザンヌ日本人サークル）は、EPFLの日本文化に関わる学生サークルです。
+    fr:
+      heading: Lausanne Nihonjin Circle
+      body: Le LNC est une association étudiante de l’EPFL autour de la culture japonaise.
+    en:
+      heading: Lausanne Nihonjin Circle
+      body: LNC is a student association at EPFL centred on Japanese culture.
+- type: cta
+  href: /events/
+  copy:
+    ja:
+      label: 催事を見る
+    fr:
+      label: Voir le programme
+    en:
+      label: View the programme

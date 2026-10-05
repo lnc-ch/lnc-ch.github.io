@@ -1,0 +1,4 @@
+/* Licensed upgrade point. Never publish Dinamo trial fonts.
+   Once LNC has a web licence, add an @font-face here with the family name
+   "ABC Diatype", then supply the licensed files privately. The fallback
+   remains deliberate, open-licensed Hanken Grotesk, not a missing-font error. */

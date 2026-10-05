@@ -1,0 +1,36 @@
+slug: autumn-gathering
+draft: true
+status: scheduled
+theme: clay
+start: '2026-10-12T18:30:00+02:00'
+end: '2026-10-12T21:00:00+02:00'
+location: EPFL
+registrationUrl: ''
+image: /images/community-study.webp
+imageIllustration: true
+translationReview:
+  fr: draft
+  en: draft
+copy:
+  ja:
+    title: 秋の交流会
+    body: 'デザイン確認用の架空の催事です。実際の開催予定ではありません。
+
+
+      公開前に、催事名・日時・場所・説明を実際の情報に置き換えてください。'
+    imageAlt: テーブルを囲む人々のイメージ画像
+  fr:
+    title: Rencontre d’automne
+    body: 'Événement fictif destiné à la présentation du design. Il ne s’agit pas d’une annonce réelle.
+
+
+      Avant publication, remplacez le titre, les horaires, le lieu et cette description par les informations
+      confirmées.'
+    imageAlt: Illustration d’un groupe autour d’une table
+  en:
+    title: Autumn Gathering
+    body: 'A fictional event for the design preview, not an actual announcement.
+
+
+      Before publishing, replace the title, dates, venue and description with confirmed event information.'
+    imageAlt: Illustration of people around a table

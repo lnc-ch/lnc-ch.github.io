@@ -1,0 +1,24 @@
+key: join
+slug: /join/
+kind: content
+theme: rose
+draft: false
+translationReview:
+  fr: draft
+  en: draft
+title:
+  ja:
+    text: 入会案内
+  fr:
+    text: Adhérer
+  en:
+    text: Join
+description:
+  ja:
+    text: LNCの入会案内。
+  fr:
+    text: Informations pour adhérer au LNC.
+  en:
+    text: LNC membership information.
+sections:
+- type: membership
