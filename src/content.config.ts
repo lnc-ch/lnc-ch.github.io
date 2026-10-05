@@ -1,58 +1,46 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
-import { newspaperSchema } from './lib/newspaper/schema';
+import { safeHref, validTimestamp } from './lib/content.mjs';
 
-const titleCopy = z.object({ text: z.string() });
-const descriptionCopy = z.object({ text: z.string().optional() });
-const heroCopy = z.object({ eyebrow: z.string().optional(), heading: z.string(), subheading: z.string().optional() });
-const richTextCopy = z.object({ heading: z.string().optional(), body: z.string() });
-const splitCopy = z.object({ heading: z.string(), body: z.string(), imageAlt: z.string().optional() });
-const galleryHeadingCopy = z.object({ heading: z.string().optional() });
-const galleryItemCopy = z.object({ alt: z.string().optional(), caption: z.string().optional() });
-const ctaCopy = z.object({ heading: z.string(), body: z.string().optional(), label: z.string() });
-const heroSchema = z.object({
-  type: z.literal('hero'), layout: z.enum(['default', 'center']).default('default'), image: z.string().optional(),
-  copy: z.object({ ja: heroCopy, fr: heroCopy.partial().optional(), en: heroCopy.partial().optional() }),
+const optionalText = z.string().optional();
+const text = z.object({ text: z.string().min(1) });
+const localized = <T extends z.ZodRawShape>(shape: T) => z.object({
+  ja: z.object(shape), fr: z.object(shape).partial().optional(), en: z.object(shape).partial().optional(),
 });
-const richTextSchema = z.object({
-  type: z.literal('rich_text'), variant: z.enum(['standard', 'statement']).default('standard'),
-  copy: z.object({ ja: richTextCopy, fr: richTextCopy.partial().optional(), en: richTextCopy.partial().optional() }),
-});
-const splitSchema = z.object({
-  type: z.literal('split'), image: z.string(), imagePosition: z.enum(['left', 'right']).default('right'),
-  copy: z.object({ ja: splitCopy, fr: splitCopy.partial().optional(), en: splitCopy.partial().optional() }),
-});
-const galleryItemSchema = z.object({ image: z.string(), copy: z.object({ ja: galleryItemCopy, fr: galleryItemCopy.partial().optional(), en: galleryItemCopy.partial().optional() }) });
-const gallerySchema = z.object({
-  type: z.literal('gallery'), items: z.array(galleryItemSchema),
-  copy: z.object({ ja: galleryHeadingCopy, fr: galleryHeadingCopy.partial().optional(), en: galleryHeadingCopy.partial().optional() }),
-});
-const ctaSchema = z.object({
-  type: z.literal('cta'), href: z.string(),
-  copy: z.object({ ja: ctaCopy, fr: ctaCopy.partial().optional(), en: ctaCopy.partial().optional() }),
-});
+const link = z.string().refine((value) => value === '' || Boolean(safeHref(value)), 'Use a local path or an http(s), mailto or tel URL.');
+const image = z.string().refine((value) => !value || (/^(\/(?!\/)|https?:\/\/)/.test(value) && Boolean(safeHref(value))), 'Use a local image path or an https:// image URL.');
+const theme = z.enum(['paper', 'clay', 'moss', 'rose', 'ink']);
+const review = z.object({ fr: z.enum(['draft','reviewed']).default('draft'), en: z.enum(['draft','reviewed']).default('draft') }).default({ fr:'draft', en:'draft' });
+const sections = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('event_index') }),
+  z.object({ type: z.literal('programme'), limit: z.number().int().min(1).max(4).default(4) }),
+  z.object({ type: z.literal('rich_text'), variant: z.enum(['standard','statement']).default('standard'), copy: localized({ heading: optionalText, body: z.string() }) }),
+  z.object({ type: z.literal('split'), image, imagePosition: z.enum(['left','right']).default('right'), copy: localized({ heading: optionalText, body: z.string(), imageAlt: optionalText }) }),
+  z.object({ type: z.literal('gallery'), copy: localized({ heading: optionalText }), items: z.array(z.object({ image, copy: localized({ alt: optionalText, caption: optionalText }) })) }),
+  z.object({ type: z.literal('cta'), href: link, copy: localized({ heading: optionalText, body: optionalText, label: z.string().min(1) }) }),
+  z.object({ type: z.literal('membership') }),
+]);
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.{yaml,yml}', base: './src/data/pages' }),
   schema: z.object({
-    key: z.string(),
-    title: z.object({ ja: titleCopy, fr: titleCopy.partial().optional(), en: titleCopy.partial().optional() }),
-    slug: z.string(),
-    description: z.object({ ja: descriptionCopy, fr: descriptionCopy.partial().optional(), en: descriptionCopy.partial().optional() }),
-    translationReview: z.object({ fr: z.enum(['draft', 'reviewed']).default('draft'), en: z.enum(['draft', 'reviewed']).default('draft') }).default({ fr: 'draft', en: 'draft' }),
-    sections: z.array(z.discriminatedUnion('type', [heroSchema, richTextSchema, splitSchema, gallerySchema, ctaSchema, newspaperSchema])),
-  }).superRefine((page, context) => {
-    const editions = new Set<string>();
-    page.sections.forEach((section, sectionIndex) => {
-      if (section.type !== 'newspaper') return;
-      if (editions.has(section.id)) context.addIssue({ code: 'custom', path: ['sections', sectionIndex, 'id'], message: `Duplicate newspaper ID: ${section.id}` });
-      editions.add(section.id);
-      const stories = new Set<string>();
-      section.stories.forEach((story, storyIndex) => {
-        if (stories.has(story.id)) context.addIssue({ code: 'custom', path: ['sections', sectionIndex, 'stories', storyIndex, 'id'], message: `Duplicate story ID: ${story.id}` });
-        stories.add(story.id);
-      });
-    });
+    key: z.string().regex(/^[a-z0-9-]+$/), slug: z.string().startsWith('/'),
+    kind: z.enum(['home','programme','content']).default('content'), theme: theme.default('paper'), draft: z.boolean().default(true),
+    title: localized(text.shape), description: localized({ text: optionalText }), translationReview: review,
+    sections: z.array(sections).default([]),
   }),
 });
-export const collections = { pages };
+const events = defineCollection({
+  loader: glob({ pattern: '**/*.{yaml,yml}', base: './src/data/events' }),
+  schema: z.object({
+    slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), draft: z.boolean().default(true),
+    status: z.enum(['scheduled','cancelled']).default('scheduled'), theme: theme.default('clay'),
+    start: z.string().refine(validTimestamp, 'Use an ISO date/time with an explicit timezone offset.'),
+    end: z.string().refine(validTimestamp, 'Use an ISO date/time with an explicit timezone offset.'),
+    location: z.string().min(1),
+    registrationUrl: z.string().refine((value) => !value || (value.startsWith('https://') && Boolean(safeHref(value))), 'Registration must use HTTPS.').default(''),
+    image: image.default(''), imageIllustration: z.boolean().default(false), translationReview: review,
+    copy: localized({ title: z.string().min(1), body: z.string(), imageAlt: optionalText }),
+  }).refine((event) => Date.parse(event.end) >= Date.parse(event.start), { path: ['end'], message: 'End must not precede start.' }),
+});
+export const collections = { pages, events };

@@ -1,33 +1,32 @@
 ---
-import site from '../data/site.json';
-import { localizePath, locales, type Locale } from '../lib/i18n';
-import { renderToolbar, renderFooter } from '../lib/newspaper/render.mjs';
-import 'normalize.css/normalize.css';
+import '@fontsource/eb-garamond/latin-400.css';
+import '@fontsource/eb-garamond/latin-ext-400.css';
+import '@fontsource/zen-old-mincho/400.css';
+import '@fontsource-variable/hanken-grotesk';
+import 'lenis/dist/lenis.css';
 import '../styles/global.css';
-import '../styles/newspaper.css';
-interface Props { title: string; description?: string; locale: Locale; slug: string; noindex?: boolean }
-const { title, description = site.description, locale, slug, noindex = false } = Astro.props;
-const base = Astro.site ?? new URL(Astro.url.origin);
+import '../styles/fonts.css';
+import { pageMeta, renderHead, renderDocumentBody } from '../lib/render/page.mjs';
+
+// Content is schema-validated by Astro. The same escaped render functions are
+// used by the dependency-free regression tests and the static visual fixture.
+const { model } = Astro.props;
+const meta = pageMeta(model);
 ---
 <!doctype html>
-<html lang={locale}>
+<html lang={meta.lang} style={`background:${meta.background};color:${meta.foreground}`}>
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
-    <link rel="canonical" href={new URL(localizePath(slug, locale), base)} />
-    {locales.map(language => <link rel="alternate" hreflang={language} href={new URL(localizePath(slug, language), base)} />)}
-    <link rel="alternate" hreflang="x-default" href={new URL(localizePath(slug, 'ja'), base)} />
-    <title>{title.replace(/\n/g, ' ')} — {site.name}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <Fragment set:html={String(renderHead(model))} />
   </head>
-  <body>
-    <div class="page-shell" data-locale={locale}>
-      <Fragment set:html={renderToolbar(site, locale, slug)} />
-      <main id="main" tabindex="-1"><slot /></main>
-      <Fragment set:html={renderFooter(site, locale)} />
-    </div>
-    <!-- Native navigation keeps document language, metadata and focus correct. -->
-    <script is:inline src="/newspaper.js" defer></script>
+  <body data-barba="wrapper">
+    <Fragment set:html={String(renderDocumentBody(model))} />
+    <div id="transition-layer" aria-hidden="true"></div>
+    <div id="page-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+    <script>
+      import '../scripts/app.mjs';
+    </script>
   </body>
 </html>

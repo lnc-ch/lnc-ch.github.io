@@ -1,22 +1,23 @@
 {
   "name": "Lausanne Nihonjin Circle",
-  "description": "Lausanne Nihonjin Circle",
-  "navigation": [
-    {
-      "href": "/",
-      "label": {
-        "ja": "一面",
-        "fr": "La une",
-        "en": "Front page"
-      }
-    },
-    {
-      "href": "/about",
-      "label": {
-        "ja": "サークルについて",
-        "fr": "Le cercle",
-        "en": "The circle"
-      }
-    }
-  ]
+  "url": "https://lnc-ch.github.io",
+  "mastheadJa": "日本人サークル",
+  "logo": "",
+  "email": "",
+  "instagramUrl": "",
+  "joinUrl": "",
+  "socialImage": "",
+  "photo": "/images/community-study.webp",
+  "detailPhoto": "/images/paper-study.webp",
+  "photoIllustration": true,
+  "photoAlt": {
+    "ja": "テーブルを囲む人々のイメージ画像",
+    "fr": "Illustration d’un groupe autour d’une table",
+    "en": "Illustration of people around a table"
+  },
+  "detailPhotoAlt": {
+    "ja": "紙と影のイメージ画像",
+    "fr": "Étude de papier et d’ombres",
+    "en": "A study of paper and shadows"
+  }
 }

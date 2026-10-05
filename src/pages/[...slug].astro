@@ -1,43 +1,25 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageRenderer from '../components/PageRenderer.astro';
-import NewspaperArticle from '../components/NewspaperArticle.astro';
-import { getLocalizedCopy, localizePath, locales, type Locale } from '../lib/i18n';
-import { articlePath, storyCopy } from '../lib/newspaper/content.mjs';
-import type { NewspaperSection, NewspaperStory } from '../lib/newspaper/schema';
-
-interface Article { edition: NewspaperSection; story: NewspaperStory }
-interface Props { page: CollectionEntry<'pages'>; locale: Locale; route: string; article?: Article }
+import { routeEntries } from '../lib/content.mjs';
+import site from '../data/site.json';
+import fixture from '../../tests/fixtures/design.json';
 
 export async function getStaticPaths() {
-  const pages = await getCollection('pages');
-  const paths: Array<{ params: { slug: string | undefined }; props: Props }> = [];
-  const seen = new Set<string>();
-  const add = (page: CollectionEntry<'pages'>, route: string, article?: Article) => {
-    for (const locale of locales) {
-      const slug = localizePath(route, locale).replace(/^\/+|\/+$/g, '');
-      if (seen.has(slug)) throw new Error(`Duplicate generated page URL: /${slug}`);
-      seen.add(slug);
-      paths.push({ params: { slug: slug || undefined }, props: { page, locale, route, article } });
-    }
-  };
-  for (const page of pages) {
-    add(page, page.data.slug);
-    for (const edition of page.data.sections) {
-      if (edition.type !== 'newspaper') continue;
-      for (const story of edition.stories) add(page, articlePath(page.data.slug, edition.id, story.id), { edition, story });
-    }
-  }
-  return paths;
+  const preview = process.env.LNC_PREVIEW === '1';
+  const testing = process.env.LNC_TEST_FIXTURES === '1';
+  if (testing && !preview) throw new Error('Test fixtures require LNC_PREVIEW=1.');
+  // Always validate genuine CMS collections, including during browser tests.
+  const cmsPages = (await getCollection('pages')).map((entry) => entry.data);
+  const cmsEvents = (await getCollection('events')).map((entry) => entry.data);
+  const pages = testing ? fixture.pages : cmsPages;
+  const events = testing ? fixture.events : cmsEvents;
+  const now = testing ? new Date('2026-10-05T12:00:00Z') : new Date();
+  return routeEntries(pages, events, preview).map((route) => ({
+    params: { slug: route.param },
+    props: { model: { ...route, site, pages, events, preview, now } },
+  }));
 }
-
-const { page, locale, route, article } = Astro.props;
-const copy = article ? storyCopy(article.story, locale) : undefined;
-const title = copy?.title ?? getLocalizedCopy(page.data.title, locale).text;
-const description = copy?.deck ?? getLocalizedCopy(page.data.description, locale).text;
-const noindex = article ? article.story.placeholder : page.data.sections.some(section => section.type === 'newspaper' && section.stories.some(story => story.placeholder));
+const { model } = Astro.props;
 ---
-<BaseLayout title={title} description={description} locale={locale} slug={route} noindex={noindex}>
-  {article ? <NewspaperArticle {...article} locale={locale} slug={page.data.slug} /> : <PageRenderer sections={page.data.sections} locale={locale} slug={page.data.slug} />}
-</BaseLayout>
+<BaseLayout model={model} />

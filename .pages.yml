@@ -13,22 +13,54 @@ content:
     fields:
     - key
     - slug
+    - draft
     sort:
     - key
-    - slug
   fields:
   - name: key
-    label: Internal page ID
+    label: Page ID
     type: string
     required: true
-    description: Used as the filename. Keep it short, e.g. home or about.
   - name: slug
     label: URL path
     type: string
     required: true
-    description: Use / for home, /about for About, etc.
+  - name: kind
+    label: Kind
+    type: select
+    options:
+      values:
+      - name: home
+        label: Homepage
+      - name: programme
+        label: Events index
+      - name: content
+        label: Content page
+    required: true
+  - name: theme
+    label: Theme
+    type: select
+    options:
+      values:
+      - name: paper
+        label: Paper
+      - name: clay
+        label: Terracotta
+      - name: moss
+        label: Moss
+      - name: rose
+        label: Rose
+      - name: ink
+        label: Ink
+    required: true
+    description: The card and its entire destination page share this colour. Contrast is managed by the
+      site.
+  - name: draft
+    label: Draft / hide in production
+    type: boolean
+    default: true
   - name: title
-    label: Page title
+    label: Title
     type: object
     fields:
     - name: ja
@@ -54,7 +86,7 @@ content:
         label: Title
         type: string
   - name: description
-    label: SEO description
+    label: Description
     type: object
     fields:
     - name: ja
@@ -83,7 +115,7 @@ content:
     type: object
     fields:
     - name: fr
-      label: French
+      label: Fr
       type: select
       options:
         values:
@@ -92,7 +124,7 @@ content:
         - name: reviewed
           label: Reviewed
     - name: en
-      label: English
+      label: En
       type: select
       options:
         values:
@@ -101,360 +133,29 @@ content:
         - name: reviewed
           label: Reviewed
   - name: sections
-    label: Sections
+    label: Page sections
     type: block
     list:
       collapsible:
         collapsed: true
         summary: '{type} — {index}'
-      min: 1
     blockKey: type
     blocks:
-    - name: newspaper
-      label: Newspaper edition
+    - name: programme
+      label: Event board
       fields:
-      - name: id
-        label: Edition ID
-        type: string
-        required: true
-        pattern: ^[a-z0-9-]+$
-        description: Stable part of article URLs. Use e.g. front. Do not change this after publishing.
-      - name: issue
-        label: Issue number
-        type: string
-        required: true
-        description: Text, e.g. 001. Keeps leading zeroes.
-      - name: date
-        label: Publication date
-        type: string
-        required: true
-        pattern: ^\d{4}-\d{2}-\d{2}$
-        description: YYYY-MM-DD. This is an editorial publication date, not a live clock.
-      - name: logo
-        label: Official LNC logo
-        type: image
-        description: Displayed unchanged inside the publisher box. Leave empty to show plain LNC initials.
-      - name: copy
-        label: Copy
-        type: object
-        fields:
-        - name: ja
-          label: Japanese (source)
-          type: object
-          fields:
-          - name: masthead
-            label: Newspaper name (line breaks allowed)
-            type: text
-            required: true
-          - name: subtitle
-            label: Line beneath the masthead
-            type: string
-          - name: season
-            label: Issue subtitle / season
-            type: string
-          - name: edition
-            label: Edition label
-            type: string
-          - name: publisherName
-            label: Publisher name (line breaks allowed)
-            type: text
-          - name: publisherNote
-            label: Publisher’s short note
-            type: text
-          - name: railLabel
-            label: Accessible sidebar label
-            type: string
-          - name: bottomLabel
-            label: Accessible notices label
-            type: string
-          - name: colophon
-            label: Colophon / production credit
-            type: text
-        - name: fr
-          label: French
-          type: object
-          fields:
-          - name: masthead
-            label: Newspaper name (line breaks allowed)
-            type: text
-          - name: subtitle
-            label: Line beneath the masthead
-            type: string
-          - name: season
-            label: Issue subtitle / season
-            type: string
-          - name: edition
-            label: Edition label
-            type: string
-          - name: publisherName
-            label: Publisher name (line breaks allowed)
-            type: text
-          - name: publisherNote
-            label: Publisher’s short note
-            type: text
-          - name: railLabel
-            label: Accessible sidebar label
-            type: string
-          - name: bottomLabel
-            label: Accessible notices label
-            type: string
-          - name: colophon
-            label: Colophon / production credit
-            type: text
-        - name: en
-          label: English
-          type: object
-          fields:
-          - name: masthead
-            label: Newspaper name (line breaks allowed)
-            type: text
-          - name: subtitle
-            label: Line beneath the masthead
-            type: string
-          - name: season
-            label: Issue subtitle / season
-            type: string
-          - name: edition
-            label: Edition label
-            type: string
-          - name: publisherName
-            label: Publisher name (line breaks allowed)
-            type: text
-          - name: publisherNote
-            label: Publisher’s short note
-            type: text
-          - name: railLabel
-            label: Accessible sidebar label
-            type: string
-          - name: bottomLabel
-            label: Accessible notices label
-            type: string
-          - name: colophon
-            label: Colophon / production credit
-            type: text
-      - name: stories
-        label: Stories / page composition
-        type: object
-        list:
-          collapsible:
-            collapsed: true
-            summary: '{id} — {kind}'
-        description: Drag to reorder within each area. Main columns total 12; the sidebar stacks; bottom
-          notices use another 12-column grid.
-        fields:
-        - name: id
-          label: Story ID
-          type: string
-          required: true
-          pattern: ^[a-z0-9-]+$
-          description: Unique within this edition; forms the full article URL.
-        - name: area
-          label: Placement
-          type: select
-          options:
-            values:
-            - name: main
-              label: Main newspaper
-            - name: rail
-              label: Right sidebar
-            - name: bottom
-              label: Bottom notices
-        - name: kind
-          label: Headline treatment
-          type: select
-          options:
-            values:
-            - name: article
-              label: Editorial article
-            - name: poster
-              label: Large vertical / display headline
-            - name: lead
-              label: Full-width main headline
-            - name: brief
-              label: Short notice
-        - name: span
-          label: Columns (1–12)
-          type: number
-          description: Use 3 for a quarter row, 4 for a third, 6 for a half, 9 for three quarters, 12
-            for full width. Ignored in the sidebar; mobile reflows automatically.
-        - name: tone
-          label: Headline background
-          type: select
-          options:
-            values:
-            - name: paper
-              label: Dark ink on paper
-            - name: ink
-              label: Paper lettering on dark ink
-        - name: placeholder
-          label: Specimen article
-          type: boolean
-          description: Shows a placeholder warning and prevents search-engine indexing. Blank bodies use
-            locale-specific filler only while this is on. Turn off before publishing real copy.
-        - name: image
-          label: Optional image
-          type: image
-        - name: href
-          label: Optional action link
-          type: string
-          description: Appears on the full article. Use an internal path or an https/mailto URL. Leave
-            blank to omit.
-        - name: copy
-          label: Copy
-          type: object
-          fields:
-          - name: ja
-            label: Japanese (source)
-            type: object
-            fields:
-            - name: title
-              label: Headline (line breaks allowed)
-              type: text
-              required: true
-            - name: label
-              label: Department / category
-              type: string
-            - name: deck
-              label: Short introduction
-              type: text
-            - name: body
-              label: Full article
-              type: text
-              description: Plain text. Use blank lines for paragraphs. For specimen articles only, a blank
-                body uses Japanese or Latin-script filler.
-            - name: meta
-              label: Short metadata (optional)
-              type: string
-            - name: byline
-              label: Byline (optional)
-              type: string
-            - name: imageAlt
-              label: Image description
-              type: string
-            - name: action
-              label: Optional action link label
-              type: string
-          - name: fr
-            label: French
-            type: object
-            fields:
-            - name: title
-              label: Headline (line breaks allowed)
-              type: text
-            - name: label
-              label: Department / category
-              type: string
-            - name: deck
-              label: Short introduction
-              type: text
-            - name: body
-              label: Full article
-              type: text
-              description: Plain text. Use blank lines for paragraphs. For specimen articles only, a blank
-                body uses Japanese or Latin-script filler.
-            - name: meta
-              label: Short metadata (optional)
-              type: string
-            - name: byline
-              label: Byline (optional)
-              type: string
-            - name: imageAlt
-              label: Image description
-              type: string
-            - name: action
-              label: Optional action link label
-              type: string
-          - name: en
-            label: English
-            type: object
-            fields:
-            - name: title
-              label: Headline (line breaks allowed)
-              type: text
-            - name: label
-              label: Department / category
-              type: string
-            - name: deck
-              label: Short introduction
-              type: text
-            - name: body
-              label: Full article
-              type: text
-              description: Plain text. Use blank lines for paragraphs. For specimen articles only, a blank
-                body uses Japanese or Latin-script filler.
-            - name: meta
-              label: Short metadata (optional)
-              type: string
-            - name: byline
-              label: Byline (optional)
-              type: string
-            - name: imageAlt
-              label: Image description
-              type: string
-            - name: action
-              label: Optional action link label
-              type: string
-    - name: hero
-      label: Hero
-      fields:
-      - name: layout
-        label: Layout
-        type: select
+      - name: limit
+        label: Number of events
+        type: number
+        default: 4
         options:
-          values:
-          - name: default
-            label: Default
-          - name: center
-            label: Center
-      - name: image
-        label: Image
-        type: image
-      - name: copy
-        label: Copy
-        type: object
-        fields:
-        - name: ja
-          label: Japanese (source)
-          type: object
-          fields:
-          - name: eyebrow
-            label: Eyebrow
-            type: string
-          - name: heading
-            label: Heading
-            type: string
-            required: true
-          - name: subheading
-            label: Subheading
-            type: text
-        - name: fr
-          label: French
-          type: object
-          fields:
-          - name: eyebrow
-            label: Eyebrow
-            type: string
-          - name: heading
-            label: Heading
-            type: string
-          - name: subheading
-            label: Subheading
-            type: text
-        - name: en
-          label: English
-          type: object
-          fields:
-          - name: eyebrow
-            label: Eyebrow
-            type: string
-          - name: heading
-            label: Heading
-            type: string
-          - name: subheading
-            label: Subheading
-            type: text
+          min: 1
+          max: 4
+    - name: event_index
+      label: Full events index
+      fields: []
     - name: rich_text
-      label: Rich text
+      label: Text
       fields:
       - name: variant
         label: Variant
@@ -464,7 +165,7 @@ content:
           - name: standard
             label: Standard
           - name: statement
-            label: Statement
+            label: Large statement
       - name: copy
         label: Copy
         type: object
@@ -477,12 +178,10 @@ content:
             label: Heading
             type: string
           - name: body
-            label: Content
-            type: rich-text
+            label: Body
+            type: text
             required: true
-            options:
-              format: html
-              switcher: false
+            description: Plain text. Blank lines create paragraphs; HTML is not executed.
         - name: fr
           label: French
           type: object
@@ -491,11 +190,9 @@ content:
             label: Heading
             type: string
           - name: body
-            label: Content
-            type: rich-text
-            options:
-              format: html
-              switcher: false
+            label: Body
+            type: text
+            description: Plain text. Blank lines create paragraphs; HTML is not executed.
         - name: en
           label: English
           type: object
@@ -504,20 +201,18 @@ content:
             label: Heading
             type: string
           - name: body
-            label: Content
-            type: rich-text
-            options:
-              format: html
-              switcher: false
+            label: Body
+            type: text
+            description: Plain text. Blank lines create paragraphs; HTML is not executed.
     - name: split
-      label: Text + image
+      label: Text and image
       fields:
       - name: image
         label: Image
         type: image
         required: true
       - name: imagePosition
-        label: Image position
+        label: Imageposition
         type: select
         options:
           values:
@@ -536,17 +231,14 @@ content:
           - name: heading
             label: Heading
             type: string
-            required: true
           - name: body
-            label: Content
-            type: rich-text
+            label: Body
+            type: text
             required: true
-            options:
-              format: html
-              switcher: false
           - name: imageAlt
             label: Image description
             type: string
+            required: true
         - name: fr
           label: French
           type: object
@@ -555,11 +247,8 @@ content:
             label: Heading
             type: string
           - name: body
-            label: Content
-            type: rich-text
-            options:
-              format: html
-              switcher: false
+            label: Body
+            type: text
           - name: imageAlt
             label: Image description
             type: string
@@ -571,11 +260,8 @@ content:
             label: Heading
             type: string
           - name: body
-            label: Content
-            type: rich-text
-            options:
-              format: html
-              switcher: false
+            label: Body
+            type: text
           - name: imageAlt
             label: Image description
             type: string
@@ -608,13 +294,9 @@ content:
             label: Heading
             type: string
       - name: items
-        label: Images
+        label: Items
         type: object
-        list:
-          collapsible:
-            collapsed: true
-            summary: Image {index}
-          min: 1
+        list: true
         fields:
         - name: image
           label: Image
@@ -631,6 +313,7 @@ content:
             - name: alt
               label: Image description
               type: string
+              required: true
             - name: caption
               label: Caption
               type: string
@@ -655,12 +338,13 @@ content:
               label: Caption
               type: string
     - name: cta
-      label: Call to action
+      label: Link
       fields:
       - name: href
-        label: Link
+        label: Destination
         type: string
         required: true
+        description: A local path (e.g. /events/) or a full https:// URL.
       - name: copy
         label: Copy
         type: object
@@ -672,12 +356,11 @@ content:
           - name: heading
             label: Heading
             type: string
-            required: true
           - name: body
-            label: Text
+            label: Body
             type: text
           - name: label
-            label: Button label
+            label: Link label
             type: string
             required: true
         - name: fr
@@ -688,10 +371,10 @@ content:
             label: Heading
             type: string
           - name: body
-            label: Text
+            label: Body
             type: text
           - name: label
-            label: Button label
+            label: Link label
             type: string
         - name: en
           label: English
@@ -701,11 +384,160 @@ content:
             label: Heading
             type: string
           - name: body
-            label: Text
+            label: Body
             type: text
           - name: label
-            label: Button label
+            label: Link label
             type: string
+    - name: membership
+      label: Membership link
+      fields: []
+- name: events
+  label: Events
+  type: collection
+  path: src/data/events
+  format: yaml
+  filename: '{primary}.yaml'
+  view:
+    primary: slug
+    fields:
+    - slug
+    - start
+    - draft
+    sort:
+    - start
+  fields:
+  - name: slug
+    label: Event ID
+    type: string
+    required: true
+    pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+    description: Stable URL and filename. Do not change after publication.
+  - name: draft
+    label: Draft / hide in production
+    type: boolean
+    default: true
+  - name: status
+    label: Status
+    type: select
+    options:
+      values:
+      - name: scheduled
+        label: Scheduled
+      - name: cancelled
+        label: Cancelled
+    required: true
+  - name: theme
+    label: Theme
+    type: select
+    options:
+      values:
+      - name: paper
+        label: Paper
+      - name: clay
+        label: Terracotta
+      - name: moss
+        label: Moss
+      - name: rose
+        label: Rose
+      - name: ink
+        label: Ink
+    required: true
+    description: The card and its entire destination page share this colour. Contrast is managed by the
+      site.
+  - name: start
+    label: Starts
+    type: string
+    required: true
+    description: ISO date/time with offset, e.g. 2026-10-12T18:30:00+02:00. Swiss winter time is +01:00;
+      summer is +02:00.
+  - name: end
+    label: Ends
+    type: string
+    required: true
+    description: Same ISO format, including timezone. Used to determine upcoming vs past.
+  - name: location
+    label: Location
+    type: string
+    required: true
+  - name: registrationUrl
+    label: Registration URL
+    type: string
+    description: Leave empty until confirmed. Only https:// URLs are accepted.
+  - name: image
+    label: Image
+    type: image
+  - name: imageIllustration
+    label: Image is illustrative, not documentary
+    type: boolean
+    default: false
+  - name: translationReview
+    label: Translation review
+    type: object
+    fields:
+    - name: fr
+      label: Fr
+      type: select
+      options:
+        values:
+        - name: draft
+          label: Draft / needs review
+        - name: reviewed
+          label: Reviewed
+    - name: en
+      label: En
+      type: select
+      options:
+        values:
+        - name: draft
+          label: Draft / needs review
+        - name: reviewed
+          label: Reviewed
+  - name: copy
+    label: Copy
+    type: object
+    fields:
+    - name: ja
+      label: Japanese (source)
+      type: object
+      fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: body
+        label: Description
+        type: text
+        required: true
+      - name: imageAlt
+        label: Image description
+        type: string
+    - name: fr
+      label: French
+      type: object
+      fields:
+      - name: title
+        label: Title
+        type: string
+      - name: body
+        label: Description
+        type: text
+      - name: imageAlt
+        label: Image description
+        type: string
+    - name: en
+      label: English
+      type: object
+      fields:
+      - name: title
+        label: Title
+        type: string
+      - name: body
+        label: Description
+        type: text
+      - name: imageAlt
+        label: Image description
+        type: string
 - name: site
   label: Site settings
   type: file
@@ -716,34 +548,62 @@ content:
     label: Association name
     type: string
     required: true
-  - name: description
-    label: Default SEO description
-    type: text
-  - name: navigation
-    label: Navigation
+  - name: url
+    label: Canonical website URL
+    type: string
+    required: true
+  - name: mastheadJa
+    label: Japanese masthead
+    type: string
+    required: true
+  - name: logo
+    label: Official LNC logo
+    type: image
+    description: Displayed unchanged. Leave empty until the official asset is supplied.
+  - name: email
+    label: Contact email
+    type: string
+  - name: instagramUrl
+    label: Instagram URL
+    type: string
+  - name: joinUrl
+    label: Membership URL
+    type: string
+  - name: socialImage
+    label: Social preview image
+    type: image
+  - name: photo
+    label: Main photograph
+    type: image
+  - name: detailPhoto
+    label: Detail photograph
+    type: image
+  - name: photoIllustration
+    label: Photographs are illustrative
+    type: boolean
+  - name: photoAlt
+    label: Main photograph descriptions
     type: object
-    list:
-      collapsible:
-        collapsed: true
-        summary: '{href}'
     fields:
-    - name: href
-      label: Link
+    - name: ja
+      label: Ja
       type: string
-      required: true
-    - name: label
-      label: Label
-      type: object
-      fields:
-      - name: ja
-        label: Japanese
-        type: string
-        required: true
-      - name: fr
-        label: French
-        type: string
-        required: true
-      - name: en
-        label: English
-        type: string
-        required: true
+    - name: fr
+      label: Fr
+      type: string
+    - name: en
+      label: En
+      type: string
+  - name: detailPhotoAlt
+    label: Detail photograph descriptions
+    type: object
+    fields:
+    - name: ja
+      label: Ja
+      type: string
+    - name: fr
+      label: Fr
+      type: string
+    - name: en
+      label: En
+      type: string

@@ -1,0 +1,6 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import site from '../data/site.json';
+const model = { kind:'404', locale:'ja', path:'/404/', site, pages:[], events:[], now:new Date(), preview:false };
+---
+<BaseLayout model={model} />

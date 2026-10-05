@@ -1,9 +1,0 @@
----
-import site from '../data/site.json';
-import type { Locale } from '../lib/i18n';
-import type { NewspaperSection, NewspaperStory } from '../lib/newspaper/schema';
-import { renderArticle } from '../lib/newspaper/render.mjs';
-interface Props { edition: NewspaperSection; story: NewspaperStory; locale: Locale; slug: string }
-const { edition, story, locale, slug } = Astro.props;
----
-<Fragment set:html={renderArticle(edition, story, locale, { slug, site })} />
